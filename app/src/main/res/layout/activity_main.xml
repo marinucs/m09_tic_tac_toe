@@ -61,14 +61,13 @@
 
     <Button
         android:id="@+id/connectBtn"
-        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="10dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
         android:background="@drawable/btn_connect_shape"
         android:text="Connect"
         android:textColor="@color/white"
