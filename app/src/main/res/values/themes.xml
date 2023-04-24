@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.M09_tic_tac_toe" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/color_primary_dark</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="android:colorBackground">@color/color_background_light</item>
+        <item name="android:windowBackground">@color/color_background_dark</item>
+        <item name="android:windowBackgroundFallback">@color/color_background_dark</item>
+        <item name="android:textColorPrimary">@color/color_primary_light</item>
+        <item name="android:textColorSecondary">@color/color_primary_light</item>
+        <item name="android:textColorPrimaryInverse">@color/color_background</item>
+        <item name="android:textColorSecondaryInverse">@color/color_background</item>
+    </style>
+
+    <style name="Theme.M09_tic_tac_toe" parent="Base.Theme.M09_tic_tac_toe" />
+</resources>
