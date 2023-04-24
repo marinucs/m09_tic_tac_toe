@@ -17,17 +17,18 @@
         app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ipTxtInput"
+            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@drawable/edit_text_style"
             android:digits="0123456789."
             android:hint="IP"
             android:inputType="number"
             android:maxLength="15"
-            style="@style/Widget.AppCompat.EditText"
-            android:background="@drawable/edit_text_style"
             tools:ignore="Autofill,HardcodedText,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,28 +44,29 @@
         app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
         app:layout_constraintStart_toEndOf="@+id/ipTxtLayout"
         app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/portTxtInput"
+            style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@drawable/edit_text_style"
             android:hint="Port"
             android:inputType="number"
             android:maxLength="6"
-            style="@style/Widget.AppCompat.EditText"
-            android:background="@drawable/edit_text_style"
             tools:ignore="Autofill,HardcodedText,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/connectBtn"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/btn_connect_shape"
         android:text="Connect"
-        style="@style/Widget.AppCompat.Button"
         app:layout_constraintBottom_toTopOf="@+id/topHorizontalGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/portTxtLayout"
@@ -76,7 +78,219 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="71dp" />
+        app:layout_constraintGuide_end="563dp" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/icon_background"
+        android:drawablePadding="15dp"
+        android:gravity="center_horizontal"
+        android:paddingStart="45dp"
+        android:paddingTop="25dp"
+        android:paddingEnd="45dp"
+        android:paddingBottom="25dp"
+        android:text="one"
+        android:textColor="@color/white"
+        app:drawableBottomCompat="@drawable/ic_shape_x"
+        app:layout_constraintBottom_toTopOf="@+id/middleHorizontalGuideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topHorizontalGuideline"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/icon_background"
+        android:drawablePadding="15dp"
+        android:gravity="center_horizontal"
+        android:paddingStart="45dp"
+        android:paddingTop="25dp"
+        android:paddingEnd="45dp"
+        android:paddingBottom="25dp"
+        android:text="two"
+        android:textColor="@color/white"
+        app:drawableBottomCompat="@drawable/ic_shape_circle_yellow"
+        app:layout_constraintBottom_toTopOf="@+id/middleHorizontalGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/topHorizontalGuideline"
+        tools:ignore="HardcodedText" />
+
+    <TableLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/middleHorizontalGuideline"
+        tools:ignore="HardcodedText">
+
+        <!-- TableRow 1 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_background_light">
+
+            <!-- Subrow 1.1 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 1.1" />
+
+            </TableRow>
+
+            <!-- Subrow 1.2 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 1.2" />
+
+            </TableRow>
+
+            <!-- Subrow 1.3 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 1.3" />
+
+            </TableRow>
+
+        </TableRow>
+
+        <!-- TableRow 2 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_background_light">
+
+            <!-- Subrow 2.1 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 2.1" />
+
+            </TableRow>
+
+            <!-- Subrow 2.2 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 2.2" />
+
+            </TableRow>
+
+            <!-- Subrow 2.3 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 2.3" />
+
+            </TableRow>
+
+        </TableRow>
+
+        <!-- TableRow 3 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_background_light">
+
+            <!-- Subrow 3.1 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 3.1" />
+
+            </TableRow>
+
+            <!-- Subrow 3.2 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 3.2" />
+
+            </TableRow>
+
+            <!-- Subrow 3.3 -->
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/darker_dark_background">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subrow 3.3" />
+
+            </TableRow>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleHorizontalGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="396dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
