@@ -137,14 +137,14 @@
         android:layout_height="wrap_content"
         android:text="Start a new game"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tableLayout"
+        app:layout_constraintBottom_toTopOf="@+id/table_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/middleHorizontalGuideline"
         tools:ignore="hardcodedText"/>
 
     <TableLayout
-        android:id="@+id/tableLayout"
+        android:id="@+id/table_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/color_background_light"
@@ -155,17 +155,17 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="HardcodedText, contentDescription">
 
-        <!-- TableRow 1 -->
+        <!-- TableRow 0 -->
         <TableRow
-            android:id="@+id/tr0"
+            android:id="@+id/table_row_0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:background="@color/color_background_light">
 
-            <!-- Subrow 1.1 -->
+            <!-- Row 0 Col 0 -->
             <TableRow
-                android:id="@+id/subrow01"
+                android:id="@+id/row0_col0"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="10dp"
@@ -173,16 +173,16 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow01"
+                    android:id="@+id/img_row0_col0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
 
             </TableRow>
 
-            <!-- Subrow 1.2 -->
+            <!-- Row 0 Col 1 -->
             <TableRow
-                android:id="@+id/subrow02"
+                android:id="@+id/row0_col1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="10dp"
@@ -190,23 +190,83 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow02"
+                    android:id="@+id/img_row0_col1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
 
             </TableRow>
 
-            <!-- Subrow 1.3 -->
+            <!-- Row 0 Col 2 -->
             <TableRow
-                android:id="@+id/subrow03"
+                android:id="@+id/row0_col2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow03"
+                    android:id="@+id/img_row0_col2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+
+            </TableRow>
+
+        </TableRow>
+
+        <!-- TableRow 1 -->
+        <TableRow
+            android:id="@+id/table_row_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@color/color_background_light">
+
+            <!-- Row 1 Col 0 -->
+            <TableRow
+                android:id="@+id/row1_col0"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/row_icon_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_row1_col0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+
+            </TableRow>
+
+            <!-- Row 1 Col 1 -->
+            <TableRow
+                android:id="@+id/row1_col1"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/row_icon_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_row1_col1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+
+            </TableRow>
+
+            <!-- Row 1 Col 2 -->
+            <TableRow
+                android:id="@+id/row1_col2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/row_icon_background"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_row1_col2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
@@ -217,15 +277,15 @@
 
         <!-- TableRow 2 -->
         <TableRow
-            android:id="@+id/tr1"
+            android:id="@+id/table_row_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
             android:background="@color/color_background_light">
 
-            <!-- Subrow 2.1 -->
+            <!-- Row 2 Col 0 -->
             <TableRow
-                android:id="@+id/subrow11"
+                android:id="@+id/row2_col0"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="10dp"
@@ -233,16 +293,16 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow11"
+                    android:id="@+id/img_row2_col0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
 
             </TableRow>
 
-            <!-- Subrow 2.2 -->
+            <!-- Row 2 Col 1 -->
             <TableRow
-                android:id="@+id/subrow12"
+                android:id="@+id/row2_col1"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="10dp"
@@ -250,83 +310,23 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow12"
+                    android:id="@+id/img_row2_col1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
 
             </TableRow>
 
-            <!-- Subrow 2.3 -->
+            <!-- Row 2 Col 2 -->
             <TableRow
-                android:id="@+id/subrow13"
+                android:id="@+id/row2_col2"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imgsubrow13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
-
-            </TableRow>
-
-        </TableRow>
-
-        <!-- TableRow 3 -->
-        <TableRow
-            android:id="@+id/tr2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:background="@color/color_background_light">
-
-            <!-- Subrow 3.1 -->
-            <TableRow
-                android:id="@+id/subrow21"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/row_icon_background"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imgsubrow21"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
-
-            </TableRow>
-
-            <!-- Subrow 3.2 -->
-            <TableRow
-                android:id="@+id/subrow22"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/row_icon_background"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imgsubrow22"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
-
-            </TableRow>
-
-            <!-- Subrow 3.3 -->
-            <TableRow
-                android:id="@+id/subrow23"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:background="@drawable/row_icon_background"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/imgsubrow23"
+                    android:id="@+id/img_row2_col2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />

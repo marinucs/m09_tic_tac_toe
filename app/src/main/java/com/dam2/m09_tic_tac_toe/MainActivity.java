@@ -16,17 +16,17 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView[][] table = new ImageView[3][3];
 
-        table[0][0] = findViewById(R.id.imgsubrow01);
-        table[0][1] = findViewById(R.id.imgsubrow02);
-        table[0][2] = findViewById(R.id.imgsubrow03);
+        table[0][0] = findViewById(R.id.img_row0_col0);
+        table[0][1] = findViewById(R.id.img_row0_col1);
+        table[0][2] = findViewById(R.id.img_row0_col2);
 
-        table[1][0] = findViewById(R.id.imgsubrow11);
-        table[1][1] = findViewById(R.id.imgsubrow12);
-        table[1][2] = findViewById(R.id.imgsubrow13);
+        table[1][0] = findViewById(R.id.img_row1_col0);
+        table[1][1] = findViewById(R.id.img_row1_col1);
+        table[1][2] = findViewById(R.id.img_row1_col2);
 
-        table[2][0] = findViewById(R.id.imgsubrow21);
-        table[2][1] = findViewById(R.id.imgsubrow22);
-        table[2][2] = findViewById(R.id.imgsubrow23);
+        table[2][0] = findViewById(R.id.img_row2_col0);
+        table[2][1] = findViewById(R.id.img_row2_col1);
+        table[2][2] = findViewById(R.id.img_row2_col2);
 
         clearTable(table);
 
