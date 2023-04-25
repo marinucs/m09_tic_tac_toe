@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ImageView[][] table = new ImageView[3][3];
-
         table[0][0] = findViewById(R.id.img_row0_col0);
         table[0][1] = findViewById(R.id.img_row0_col1);
         table[0][2] = findViewById(R.id.img_row0_col2);
@@ -30,20 +29,21 @@ public class MainActivity extends AppCompatActivity {
 
         clearTable(table);
 
-        TextInputEditText ip = findViewById(R.id.ipEditTextInput);
-        TextInputEditText port = findViewById(R.id.portEditTextInput);
-        Button connect = findViewById(R.id.connectBtn);
+        TextInputEditText ip = findViewById(R.id.ip_edit_text_input);
+        TextInputEditText port = findViewById(R.id.port_edit_text_input);
+        Button connect = findViewById(R.id.connect_btn);
 
         connect.setOnClickListener(view -> {
             // if connection ok
 
         });
 
-        Button start = findViewById(R.id.startBtn);
+        Button start = findViewById(R.id.start_btn);
 
         start.setOnClickListener(view -> {
             // if connection ok
-
+                // servidor tiene matriz y cliente envia coords
+                // recibe, lo pone y lo envia de vuelta
         });
 
     }

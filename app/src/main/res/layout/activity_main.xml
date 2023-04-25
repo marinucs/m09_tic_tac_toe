@@ -8,17 +8,17 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/ipTxtLayout"
+        android:id="@+id/ip_txt_layout"
         android:layout_width="175dp"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:textColorHint="@color/color_background_light"
-        app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
+        app:layout_constraintBottom_toBottomOf="@id/top_horizontal_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ipEditTextInput"
+            android:id="@+id/ip_edit_text_input"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/portTxtLayout"
+        android:id="@+id/port_txt_layout"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
@@ -40,12 +40,12 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         android:textColorHint="@color/color_background_light"
-        app:layout_constraintBottom_toBottomOf="@id/topHorizontalGuideline"
-        app:layout_constraintStart_toEndOf="@+id/ipTxtLayout"
+        app:layout_constraintBottom_toBottomOf="@id/top_horizontal_guideline"
+        app:layout_constraintStart_toEndOf="@+id/ip_txt_layout"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/portEditTextInput"
+            android:id="@+id/port_edit_text_input"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/connectBtn"
+        android:id="@+id/connect_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
@@ -70,14 +70,14 @@
         android:text="Connect"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/topHorizontalGuideline"
+        app:layout_constraintBottom_toTopOf="@+id/top_horizontal_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/portTxtLayout"
+        app:layout_constraintStart_toEndOf="@+id/port_txt_layout"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/topHorizontalGuideline"
+        android:id="@+id/top_horizontal_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -101,9 +101,9 @@
         android:textColor="@color/white"
         android:visibility="visible"
         app:drawableBottomCompat="@drawable/ic_shape_x_32dp"
-        app:layout_constraintBottom_toTopOf="@+id/middleHorizontalGuideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_horizontal_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topHorizontalGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/top_horizontal_guideline"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -125,14 +125,14 @@
         android:textColor="@color/white"
         android:visibility="visible"
         app:drawableBottomCompat="@drawable/ic_shape_circle_yellow_32dp"
-        app:layout_constraintBottom_toTopOf="@+id/middleHorizontalGuideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_horizontal_guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/player1"
-        app:layout_constraintTop_toBottomOf="@+id/topHorizontalGuideline"
+        app:layout_constraintTop_toBottomOf="@+id/top_horizontal_guideline"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/startBtn"
+        android:id="@+id/start_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start a new game"
@@ -140,7 +140,7 @@
         app:layout_constraintBottom_toTopOf="@+id/table_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/middleHorizontalGuideline"
+        app:layout_constraintTop_toTopOf="@+id/middle_horizontal_guideline"
         tools:ignore="hardcodedText"/>
 
     <TableLayout
@@ -338,7 +338,7 @@
     </TableLayout>
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/middleHorizontalGuideline"
+        android:id="@+id/middle_horizontal_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
