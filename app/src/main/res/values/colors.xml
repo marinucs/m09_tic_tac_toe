@@ -5,6 +5,8 @@
 
     <color name="color_primary">#86AC9A</color>
     <color name="color_primary_dark">#678F7B</color>
+    <color name="darker25_color_primary_dark">#33473D</color>
+    <color name="darker50_color_primary_dark">#4D6B5C</color>
     <color name="color_primary_light">#BCDDCE</color>
     <color name="color_accent">#A6C9B9</color>
 
