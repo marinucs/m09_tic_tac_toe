@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -23,11 +24,14 @@ public class MainActivity extends AppCompatActivity {
     private ImageView[][] table;
     private Button connect;
     private Button start;
+    private TextView player1;
+    private TextView player2;
     int[] rowIds;
     private ObjectOutputStream output;
     private Context context;
     private boolean serverOnline = false;
     private boolean gameOn = false;
+    private boolean isMyTurn;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -64,10 +68,12 @@ public class MainActivity extends AppCompatActivity {
             if (ipOK && portOK) {
                 AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect();
                 asyncTaskConnect.execute(connectionAddress);
-                if (serverOnline) disableConnectButton(true);
-                Toast.makeText(context, "Conexión establecida", Toast.LENGTH_LONG).show();
+                if (serverOnline) {
+                    disableConnectButton(true);
+                    Toast.makeText(context, "Conexión establecida", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(context, "La dirección introducida es incorrecta.",
+                Toast.makeText(context, "Error en la IP o en el puerto",
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -89,8 +95,10 @@ public class MainActivity extends AppCompatActivity {
             if (serverOnline && gameOn) {
                 disableStartGameButton(true);
                 Toast.makeText(context, "Comienza la partida", Toast.LENGTH_LONG).show();
-            } else Toast.makeText(context, "No estás conectado", Toast.LENGTH_LONG).show();
+            } // else Toast.makeText(context, "No estás conectado", Toast.LENGTH_LONG).show();
 
+            player1 = findViewById(R.id.player1);
+            player2 = findViewById(R.id.player2);
         });
 
         do {
@@ -101,9 +109,15 @@ public class MainActivity extends AppCompatActivity {
                     imageView.setTag(coords);
                     imageView.setOnClickListener(v -> {
                         String clickedCoords = (String) v.getTag();
-                        if (isBoxEmpty(clickedCoords)) {
-                            AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
-                            asyncTaskSendMessage.execute(clickedCoords);
+                        // Esperar a movimiento del server
+                        if (isMyTurn) {
+                            if (isBoxEmpty(clickedCoords)) {
+                                AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
+                                asyncTaskSendMessage.execute(clickedCoords);
+                            } else {
+                                Toast.makeText(context, "No es tu turno!",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                         } else {
                             Toast.makeText(context, "La casilla está ocupada!",
                                     Toast.LENGTH_SHORT).show();
@@ -146,12 +160,16 @@ public class MainActivity extends AppCompatActivity {
                         int row = Integer.parseInt(clientMove.substring(0, 1));
                         int col = Integer.parseInt(clientMove.substring(1, 2));
                         runOnUiThread(() -> {
+                            player1.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
                             table[row][col].setImageResource(R.drawable.ic_shape_circle_yellow_32dp);
                             table[row][col].setVisibility(View.VISIBLE);
                         });
                     }
                     output.writeObject(clientMove);
                     output.flush();
+                    runOnUiThread(() -> {
+                        player2.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker25_color_primary_dark)));
+                    });
                 } else {
                     runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible",
                             Toast.LENGTH_LONG).show());
@@ -180,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                     String serverMove = (String) input.readObject();
                     if (serverMove.equals("ack")) {
                         gameOn = true;
+                        isMyTurn = true;
                         continue;
                     }
                     if (serverMove.equals("ganador") || serverMove.equals("empate")) {
@@ -194,15 +213,20 @@ public class MainActivity extends AppCompatActivity {
                             table[row][col].setImageResource(R.drawable.ic_shape_x_32dp);
                             table[row][col].setVisibility(View.VISIBLE);
                         });
+
                         gameOn = false;
                         end = true;
+
                     } else {
                         int row = Integer.parseInt(serverMove.substring(0, 1));
                         int col = Integer.parseInt(serverMove.substring(1, 2));
                         runOnUiThread(() -> {
                             table[row][col].setImageResource(R.drawable.ic_shape_x_32dp);
                             table[row][col].setVisibility(View.VISIBLE);
+                            player1.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker25_color_primary_dark)));
+                            player2.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
                         });
+                        isMyTurn = true;
                     }
                 } while (!end);
             } catch (Exception e) {
