@@ -40,16 +40,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         context = MainActivity.this;
         table = new ImageView[3][3];
-        rowIds = new int[]{R.id.img_row0_col0, R.id.img_row0_col1, R.id.img_row0_col2,
-                R.id.img_row1_col0, R.id.img_row1_col1, R.id.img_row1_col2, R.id.img_row2_col0,
-                R.id.img_row2_col1, R.id.img_row2_col2};
-        int index = 0;
 
-        for (int row = 0; row < table.length; row++) {
-            for (int col = 0; col < table[row].length; col++) {
-                table[row][col] = findViewById(rowIds[index++]);
-            }
-        }
+        setupTable();
 
         clearTable(table);
 
@@ -62,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(view -> {
             String ip = Objects.requireNonNull(ipInput.getText()).toString();
             String port = Objects.requireNonNull(portInput.getText()).toString();
-            String[] connectionAddress = {ip, port};
+            String connectionAddress = ip + "-" + port;
             boolean ipOK = ip.length() > 0 && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
             boolean portOK = port.length() > 0 && port.length() < 5;
             if (ipOK && portOK) {
@@ -101,33 +93,52 @@ public class MainActivity extends AppCompatActivity {
             player2 = findViewById(R.id.player2);
         });
 
-        do {
-            for (int row = 0; row < table.length; row++) {
-                for (int col = 0; col < table[row].length; col++) {
-                    ImageView imageView = table[row][col];
-                    String coords = String.format(Locale.getDefault(), "%d%d", row, col);
-                    imageView.setTag(coords);
-                    imageView.setOnClickListener(v -> {
-                        String clickedCoords = (String) v.getTag();
-                        // Esperar a movimiento del server
-                        if (isMyTurn) {
-                            if (isBoxEmpty(clickedCoords)) {
-                                AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
-                                asyncTaskSendMessage.execute(clickedCoords);
-                            } else {
-                                Toast.makeText(context, "No es tu turno!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(context, "La casilla está ocupada!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            }
-        } while (gameOn);
-
     }
+
+    private void setupTable() {
+        int[] rowIds = new int[] {
+                R.id.img_row0_col0, R.id.img_row0_col1, R.id.img_row0_col2,
+                R.id.img_row1_col0, R.id.img_row1_col1, R.id.img_row1_col2,
+                R.id.img_row2_col0, R.id.img_row2_col1, R.id.img_row2_col2
+        };
+
+        int index = 0;
+        for (int row = 0; row < table.length; row++) {
+            for (int col = 0; col < table[row].length; col++) {
+                ImageView imageView = findViewById(rowIds[index++]);
+                imageView.setOnClickListener(new CellClickListener(row, col));
+                table[row][col] = imageView;
+            }
+        }
+    }
+
+    private class CellClickListener implements View.OnClickListener {
+        private final int row;
+        private final int col;
+
+        public CellClickListener(int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        @Override
+        public void onClick(View v) {
+            String coords = String.format(Locale.getDefault(), "%d%d", row, col);
+            if (isMyTurn) {
+                if (isBoxEmpty(coords)) {
+                    AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
+                    asyncTaskSendMessage.execute(coords);
+                } else {
+                    Toast.makeText(context, "No es tu turno!",
+                            Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(context, "La casilla está ocupada!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
@@ -135,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... values) {
             try {
-                Socket client = new Socket(values[0], Integer.parseInt(values[1]));
+                String[] socketAtts = values[0].split("-");
+                Socket client = new Socket(socketAtts[0], Integer.parseInt(socketAtts[1]));
                 output = new ObjectOutputStream(client.getOutputStream());
                 ObjectInputStream input = new ObjectInputStream(client.getInputStream());
                 serverOnline = true;
