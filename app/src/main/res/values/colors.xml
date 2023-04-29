@@ -15,4 +15,6 @@
     <color name="darker_dark_background">#271c2b</color>
     <color name="color_background_light">#83668B</color>
     <color name="color_foreground">#6E5376</color>
+
+    <color name="color_gray">#484549</color>
 </resources>
