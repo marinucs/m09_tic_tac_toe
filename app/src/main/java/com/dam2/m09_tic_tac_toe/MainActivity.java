@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         connect.setOnClickListener(view -> {
             String ip = Objects.requireNonNull(ipInput.getText()).toString();
             String port = Objects.requireNonNull(portInput.getText()).toString();
-            String connectionAddress = ip + "-" + port;
+            String[] connectionAddress = {ip, port};
             boolean ipOK = ip.length() > 0 && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
             boolean portOK = port.length() > 0 && port.length() < 5;
             if (ipOK && portOK) {
@@ -146,8 +146,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(String... values) {
             try {
-                String[] socketAtts = values[0].split("-");
-                Socket client = new Socket(socketAtts[0], Integer.parseInt(socketAtts[1]));
+                Socket client = new Socket(values[0], Integer.parseInt(values[1]));
                 output = new ObjectOutputStream(client.getOutputStream());
                 ObjectInputStream input = new ObjectInputStream(client.getInputStream());
                 serverOnline = true;
