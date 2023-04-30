@@ -257,15 +257,11 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(context, "Tu turno", Toast.LENGTH_SHORT).show();
                         });
                         continue;
-                    }
-
-                    if (serverInput.equals("ganador") || serverInput.equals("empate")) {
+                    } else if (serverInput.equals("ganador") || serverInput.equals("empate")) {
                         gameOn = false;
                         end = true;
                         runOnUiThread(() -> disableStartGameButton(gameOn));
-                    }
-
-                    if (serverInput.contains("-")) {
+                    } else if (serverInput.contains("-")) {
                         int row = Integer.parseInt(serverInput.substring(serverInput.length() - 2,
                                 serverInput.length() - 1));
                         int col = Integer.parseInt(serverInput.substring(serverInput.length() - 1));
@@ -290,7 +286,7 @@ public class MainActivity extends AppCompatActivity {
                         isMyTurn = true;
                     }
 
-                } while (!end);
+                } while (true);
             } catch (Exception e) {
                 System.out.println("[X] Recibido error: " + e.getMessage());
             }
