@@ -137,6 +137,7 @@
         android:layout_height="wrap_content"
         android:text="Start a new game"
         android:textSize="18sp"
+        android:clickable="false"
         app:layout_constraintBottom_toTopOf="@+id/table_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

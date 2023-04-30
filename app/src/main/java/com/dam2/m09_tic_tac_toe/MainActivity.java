@@ -3,12 +3,9 @@ package com.dam2.m09_tic_tac_toe;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.content.res.ResourcesCompat;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView server, client;
     private ObjectOutputStream output;
     private Context context;
-    private boolean serverOnline, gameOn = false;
+    private boolean serverOnline = false;
+    private boolean disconnect = false;
     private boolean isMyTurn;
 
     @SuppressLint("SetTextI18n")
@@ -47,39 +45,36 @@ public class MainActivity extends AppCompatActivity {
         connect = findViewById(R.id.connect_btn);
 
         connect.setOnClickListener(view -> {
-            String ip = Objects.requireNonNull(ipInput.getText()).toString();
-            String port = Objects.requireNonNull(portInput.getText()).toString();
-            String[] connectionAddress = {ip, port};
-            boolean ipOK = ip.length() > 0 && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
-            boolean portOK = port.length() > 0 && port.length() < 5;
-            if (ipOK && portOK) {
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect();
-                asyncTaskConnect.execute(connectionAddress);
+            if (connect.getText().equals("CONNECT")) {
+                String ip = Objects.requireNonNull(ipInput.getText()).toString();
+                String port = Objects.requireNonNull(portInput.getText()).toString();
+                String[] connectionAddress = {ip, port};
+                boolean ipOK = ip.length() > 0 && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
+                boolean portOK = port.length() > 0 && port.length() < 5;
+                if (ipOK && portOK) {
+                    AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect();
+                    asyncTaskConnect.execute(connectionAddress);
+                } else {
+                    Toast.makeText(context, "Error en la IP o en el puerto", Toast.LENGTH_SHORT).show();
+                }
             } else {
-                Toast.makeText(context, "Error en la IP o en el puerto", Toast.LENGTH_SHORT).show();
+                disconnect = true;
             }
         });
 
         start = findViewById(R.id.start_btn);
 
+        if (serverOnline) {
+            start.setClickable(true);
+        }
+        
         start.setOnClickListener(view -> {
             // Enviamos mensaje de jugar
             AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
             asyncTaskSendMessage.execute("jugar");
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            // En caso de conexión establecida y partida aceptada, deshabilitamos el botón 'start'
-            System.out.println("Server Online: " + serverOnline + " gameOn: " + gameOn);
-            if (serverOnline && gameOn) {
-                disableStartGameButton(true);
-                Toast.makeText(context, "Comienza la partida", Toast.LENGTH_SHORT).show();
-            } // else Toast.makeText(context, "No estás conectado", Toast.LENGTH_SHORT).show();
-
+            
+            Toast.makeText(context, "Comienza la partida", Toast.LENGTH_SHORT).show();
+            
             server = findViewById(R.id.server);
             client = findViewById(R.id.client);
 
@@ -135,26 +130,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void disableConnectButton(boolean connectionOK) {
-        if (connectionOK) {
-            connect.setClickable(false);
-            connect.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-        } /*else {
-            connect.setClickable(true);
-            connect.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker25_color_primary_dark)));
-        }*/
-    }
-
-    public void disableStartGameButton(boolean gameOn) {
-        if (gameOn) start.setVisibility(View.GONE);
-        else start.setVisibility(View.VISIBLE);
-    }
-
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    class AsyncTaskConnect extends AsyncTask<String, Void, Void> {
+    class AsyncTaskConnect extends AsyncTask<String, Void, String> {
+
         @Override
-        protected Void doInBackground(String... values) {
+        protected String doInBackground(String... values) {
             try {
                 //noinspection resource
                 Socket client = new Socket(values[0], Integer.parseInt(values[1]));
@@ -163,24 +144,31 @@ public class MainActivity extends AppCompatActivity {
                 serverOnline = true;
                 System.out.println("Conexión establecida");
                 runOnUiThread(() -> {
-                    disableConnectButton(true);
+                    // TODO: cambiar a conectar o desconectar en lugar de deshabilitarlo
                     Toast.makeText(context, "Conexión establecida", Toast.LENGTH_SHORT).show();
+                    if (connect.getText().equals("CONNECT")) connect.setText("DISCONNECT");
                     setUpTable();
                 });
                 new ThreadClient(input, table).start();
             } catch (IOException e) {
-                runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible",
-                        Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible", Toast.LENGTH_SHORT).show());
+                if (connect.getText().equals("DISCONNECT")) connect.setText("CONNECT");
             }
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String message) {
+            super.onPostExecute(message);
+        }
+
     }
 
     @SuppressWarnings("deprecation")
     @SuppressLint("StaticFieldLeak")
-    class AsyncTaskSendMessage extends AsyncTask<String, Void, Void> {
+    class AsyncTaskSendMessage extends AsyncTask<String, Void, String> {
         @Override
-        protected Void doInBackground(String... values) {
+        protected String doInBackground(String... values) {
             try {
                 String clientOutput = values[0];
                 System.out.println("[o] Client message: " + clientOutput);
@@ -208,24 +196,30 @@ public class MainActivity extends AppCompatActivity {
                         output.flush();
                         // TODO: Borrar lo siguiente, pues está en el Thread Client al recibir 'ACK'
                         isMyTurn = true;
-                        gameOn = true;
+                        
                         runOnUiThread(() -> {
                             clearTable();
                             server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
                             client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
-                            Toast.makeText(context, "Tu turno", Toast.LENGTH_SHORT).show();
                         });
                         // System.out.println("From client, after 'jugar' - isMyTurn: " + isMyTurn);
                     }
                 } else {
                     runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible",
                             Toast.LENGTH_SHORT).show());
+                    if (connect.getText().equals("DISCONNECT")) connect.setText("CONNECT");
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
             return null;
         }
+
+        @Override
+        protected void onPostExecute(String message) {
+            super.onPostExecute(message);
+        }
+
     }
 
     class ThreadClient extends Thread {
@@ -240,13 +234,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                boolean end = false;
                 do {
                     String serverInput = (String) input.readObject();
                     System.out.println("[1] Server message: " + serverInput);
                     // System.out.println("From server - isMyTurn: " + isMyTurn);
                     if (serverInput.equals("ack")) {
-                        gameOn = true;
+                        
                         isMyTurn = true;
                         // System.out.println("From server, after 'ack' - isMyTurn: " + isMyTurn);
                         System.out.println("[2] Server message: Comienza la partida");
@@ -254,25 +247,18 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             clearTable();
                             server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
-                            Toast.makeText(context, "Tu turno", Toast.LENGTH_SHORT).show();
                         });
-                        continue;
                     } else if (serverInput.equals("ganador") || serverInput.equals("empate")) {
-                        gameOn = false;
-                        end = true;
-                        runOnUiThread(() -> disableStartGameButton(gameOn));
+                        
                     } else if (serverInput.contains("-")) {
-                        int row = Integer.parseInt(serverInput.substring(serverInput.length() - 2,
-                                serverInput.length() - 1));
+                        int row = Integer.parseInt(serverInput.substring(serverInput.length() - 2
+                                , serverInput.length() - 1));
                         int col = Integer.parseInt(serverInput.substring(serverInput.length() - 1));
                         runOnUiThread(() -> {
                             table[row][col].setImageResource(R.drawable.ic_shape_x_50dp);
                             table[row][col].setClickable(false);
                         });
-
-                        gameOn = false;
-                        end = true;
-                        runOnUiThread(() -> disableStartGameButton(gameOn));
+                        
                     } else {
                         int row = Integer.parseInt(serverInput.substring(0, 1));
                         int col = Integer.parseInt(serverInput.substring(1, 2));
@@ -281,12 +267,11 @@ public class MainActivity extends AppCompatActivity {
                             table[row][col].setClickable(false);
                             server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
                             client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
-                            Toast.makeText(context, "Tu turno", Toast.LENGTH_SHORT).show();
                         });
                         isMyTurn = true;
                     }
-
-                } while (true);
+                } while (serverOnline || !disconnect);
+                
             } catch (Exception e) {
                 System.out.println("[X] Recibido error: " + e.getMessage());
             }
