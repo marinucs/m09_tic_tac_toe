@@ -84,7 +84,7 @@
         app:layout_constraintGuide_end="588dp" />
 
     <TextView
-        android:id="@+id/player1"
+        android:id="@+id/server"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
@@ -100,14 +100,14 @@
         android:text="SERVER"
         android:textColor="@color/white"
         android:visibility="visible"
-        app:drawableBottomCompat="@drawable/ic_shape_x_32dp"
+        app:drawableBottomCompat="@drawable/ic_shape_x_50dp"
         app:layout_constraintBottom_toTopOf="@+id/middle_horizontal_guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top_horizontal_guideline"
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/player2"
+        android:id="@+id/client"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
@@ -124,10 +124,10 @@
         android:text="CLIENT"
         android:textColor="@color/white"
         android:visibility="visible"
-        app:drawableBottomCompat="@drawable/ic_shape_circle_yellow_32dp"
+        app:drawableBottomCompat="@drawable/ic_shape_circle_yellow_50dp"
         app:layout_constraintBottom_toTopOf="@+id/middle_horizontal_guideline"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/player1"
+        app:layout_constraintStart_toEndOf="@+id/server"
         app:layout_constraintTop_toBottomOf="@+id/top_horizontal_guideline"
         tools:ignore="HardcodedText" />
 
@@ -172,11 +172,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row0_col0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -189,11 +188,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row0_col1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -205,11 +203,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row0_col2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -232,11 +229,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row1_col0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -249,11 +245,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row1_col1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -265,11 +260,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row1_col2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -292,11 +286,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row2_col0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -309,11 +302,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row2_col1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
@@ -325,11 +317,10 @@
                 android:background="@drawable/row_icon_background"
                 android:gravity="center">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_row2_col2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_shape_circle_yellow_50dp" />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
 
             </TableRow>
 
