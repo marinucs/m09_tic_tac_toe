@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
@@ -24,10 +23,11 @@ public class MainActivity extends AppCompatActivity {
     private AppCompatImageView[][] table;
     private Button connect, start;
     private TextView server, client;
+    private Socket clientSocket;
+    private ObjectInputStream input;
     private ObjectOutputStream output;
     private Context context;
     private boolean serverOnline = false;
-    private boolean disconnect = false;
     private boolean isMyTurn;
 
     @SuppressLint("SetTextI18n")
@@ -45,28 +45,37 @@ public class MainActivity extends AppCompatActivity {
         connect = findViewById(R.id.connect_btn);
 
         connect.setOnClickListener(view -> {
-            if (connect.getText().equals("CONNECT")) {
+            if (!serverOnline) {
                 String ip = Objects.requireNonNull(ipInput.getText()).toString();
                 String port = Objects.requireNonNull(portInput.getText()).toString();
-                String[] connectionAddress = {ip, port};
-                boolean ipOK = ip.length() > 0 && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
+                boolean ipOK = ip.length() > 0
+                               && ip.matches("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$");
                 boolean portOK = port.length() > 0 && port.length() < 5;
                 if (ipOK && portOK) {
+                    String[] connectionAddress = {ip, port};
                     AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect();
                     asyncTaskConnect.execute(connectionAddress);
                 } else {
-                    Toast.makeText(context, "Error en la IP o en el puerto", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,
+                                   "Error en la IP o en el puerto",
+                                   Toast.LENGTH_SHORT).show();
                 }
             } else {
-                disconnect = true;
+                try {
+                    input.close();
+                    output.close();
+                    clientSocket.close();
+                    Toast.makeText(context, "Conexión finalizada", Toast.LENGTH_SHORT).show();
+                    connect.setText("Connect");
+                    start.setClickable(false);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         start = findViewById(R.id.start_btn);
-
-        if (serverOnline) {
-            start.setClickable(true);
-        }
+        start.setClickable(false);
         
         start.setOnClickListener(view -> {
             // Enviamos mensaje de jugar
@@ -77,9 +86,7 @@ public class MainActivity extends AppCompatActivity {
             
             server = findViewById(R.id.server);
             client = findViewById(R.id.client);
-
         });
-
     }
 
     private void setUpTable() {
@@ -126,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     AsyncTaskSendMessage asyncTaskSendMessage = new AsyncTaskSendMessage();
                     asyncTaskSendMessage.execute(coords);
                 }
-            } // else Toast.makeText(context, "Es el turno del servidor", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -134,32 +141,27 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected String doInBackground(String... values) {
             try {
-                //noinspection resource
-                Socket client = new Socket(values[0], Integer.parseInt(values[1]));
-                output = new ObjectOutputStream(client.getOutputStream());
-                ObjectInputStream input = new ObjectInputStream(client.getInputStream());
+                clientSocket = new Socket(values[0], Integer.parseInt(values[1]));
+                output = new ObjectOutputStream(clientSocket.getOutputStream());
+                input = new ObjectInputStream(clientSocket.getInputStream());
                 serverOnline = true;
                 System.out.println("Conexión establecida");
                 runOnUiThread(() -> {
-                    // TODO: cambiar a conectar o desconectar en lugar de deshabilitarlo
                     Toast.makeText(context, "Conexión establecida", Toast.LENGTH_SHORT).show();
-                    if (connect.getText().equals("CONNECT")) connect.setText("DISCONNECT");
+                    connect.setText("Disconnect");
                     setUpTable();
+                    start.setClickable(true);
                 });
-                new ThreadClient(input, table).start();
             } catch (IOException e) {
-                runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible", Toast.LENGTH_SHORT).show());
-                if (connect.getText().equals("DISCONNECT")) connect.setText("CONNECT");
+                runOnUiThread(() -> Toast.makeText(context,
+                                                   "Servidor no disponible",
+                                                   Toast.LENGTH_SHORT).show());
             }
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(String message) {
-            super.onPostExecute(message);
         }
 
     }
@@ -172,9 +174,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 String clientOutput = values[0];
                 System.out.println("[o] Client message: " + clientOutput);
-                // System.out.println("From client - isMyTurn: " + isMyTurn);
                 if (serverOnline) {
-                    if (isMyTurn) {
+                    if (clientOutput.equals("jugar")) {
+                        output.writeObject(clientOutput);
+                        output.flush();
+                        isMyTurn = true;
+                        runOnUiThread(() -> {
+                            clearTable();
+                            server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
+                            client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
+                        });
+                    } else if (isMyTurn) {
                         System.out.println("Es tu turno, cliente");
                         int row = Integer.parseInt(clientOutput.substring(0, 1));
                         int col = Integer.parseInt(clientOutput.substring(1, 2));
@@ -191,23 +201,62 @@ public class MainActivity extends AppCompatActivity {
                         output.writeObject(clientOutput);
                         output.flush();
                     }
-                    if (clientOutput.equals("jugar")) {
-                        output.writeObject(clientOutput);
-                        output.flush();
-                        // TODO: Borrar lo siguiente, pues está en el Thread Client al recibir 'ACK'
-                        isMyTurn = true;
-                        
-                        runOnUiThread(() -> {
-                            clearTable();
-                            server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
-                            client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
-                        });
-                        // System.out.println("From client, after 'jugar' - isMyTurn: " + isMyTurn);
+
+                    try {
+                        String serverInput = (String) input.readObject();
+                        System.out.println("[1] Server message: " + serverInput);
+                        if (serverInput.equals("ack")) {
+                            isMyTurn = true;
+                            System.out.println("[2] Server message: Comienza la partida");
+                            System.out.println("[3] Server message: Primer turno para cliente");
+                            runOnUiThread(() -> {
+                                clearTable();
+                                server.setBackgroundTintList(ColorStateList.valueOf(
+                                        getResources().getColor(R.color.color_gray)
+                                ));
+                            });
+                        } else if (serverInput.equals("ganador")) {
+                            runOnUiThread(() -> Toast.makeText(context,
+                                                               "¡Has ganado!",
+                                                               Toast.LENGTH_SHORT).show());
+                        } else if (serverInput.equals("empate")) {
+                            runOnUiThread(() -> Toast.makeText(context,
+                                                               "¡Empate!",
+                                                               Toast.LENGTH_SHORT).show());
+                        } else if (serverInput.contains("-")) {
+                            int row = Integer.parseInt(serverInput.substring(
+                                serverInput.length() - 2, serverInput.length() - 1
+                            ));
+                            int col = Integer.parseInt(serverInput.substring(
+                                serverInput.length() - 1)
+                            );
+                            runOnUiThread(() -> {
+                                table[row][col].setImageResource(R.drawable.ic_shape_x_50dp);
+                                table[row][col].setClickable(false);
+                            });
+                            runOnUiThread(() -> Toast.makeText(context,
+                                                               "¡Has perdido!",
+                                                               Toast.LENGTH_SHORT).show());
+                        } else {
+                            int row = Integer.parseInt(serverInput.substring(0, 1));
+                            int col = Integer.parseInt(serverInput.substring(1, 2));
+                            runOnUiThread(() -> {
+                                table[row][col].setImageResource(R.drawable.ic_shape_x_50dp);
+                                table[row][col].setClickable(false);
+                                server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
+                                client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
+                            });
+                            isMyTurn = true;
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        System.out.println("[X] Recibido error: " + e.getMessage());
                     }
                 } else {
-                    runOnUiThread(() -> Toast.makeText(context, "Servidor no disponible",
-                            Toast.LENGTH_SHORT).show());
-                    if (connect.getText().equals("DISCONNECT")) connect.setText("CONNECT");
+                    runOnUiThread(() -> Toast.makeText(context,
+                                                       "Servidor no disponible",
+                                                       Toast.LENGTH_SHORT).show());
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -215,67 +264,6 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
-        @Override
-        protected void onPostExecute(String message) {
-            super.onPostExecute(message);
-        }
-
-    }
-
-    class ThreadClient extends Thread {
-        private final ObjectInputStream input;
-        private final ImageView[][] table;
-
-        public ThreadClient(ObjectInputStream input, ImageView[][] table) throws IOException {
-            this.table = table;
-            this.input = input;
-        }
-
-        @Override
-        public void run() {
-            try {
-                do {
-                    String serverInput = (String) input.readObject();
-                    System.out.println("[1] Server message: " + serverInput);
-                    // System.out.println("From server - isMyTurn: " + isMyTurn);
-                    if (serverInput.equals("ack")) {
-                        
-                        isMyTurn = true;
-                        // System.out.println("From server, after 'ack' - isMyTurn: " + isMyTurn);
-                        System.out.println("[2] Server message: Comienza la partida");
-                        System.out.println("[3] Server message: Primer turno para cliente");
-                        runOnUiThread(() -> {
-                            clearTable();
-                            server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
-                        });
-                    } else if (serverInput.equals("ganador") || serverInput.equals("empate")) {
-                        
-                    } else if (serverInput.contains("-")) {
-                        int row = Integer.parseInt(serverInput.substring(serverInput.length() - 2
-                                , serverInput.length() - 1));
-                        int col = Integer.parseInt(serverInput.substring(serverInput.length() - 1));
-                        runOnUiThread(() -> {
-                            table[row][col].setImageResource(R.drawable.ic_shape_x_50dp);
-                            table[row][col].setClickable(false);
-                        });
-                        
-                    } else {
-                        int row = Integer.parseInt(serverInput.substring(0, 1));
-                        int col = Integer.parseInt(serverInput.substring(1, 2));
-                        runOnUiThread(() -> {
-                            table[row][col].setImageResource(R.drawable.ic_shape_x_50dp);
-                            table[row][col].setClickable(false);
-                            server.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.color_gray)));
-                            client.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.darker_dark_background)));
-                        });
-                        isMyTurn = true;
-                    }
-                } while (serverOnline || !disconnect);
-                
-            } catch (Exception e) {
-                System.out.println("[X] Recibido error: " + e.getMessage());
-            }
-        }
     }
 
     private void clearTable() {
